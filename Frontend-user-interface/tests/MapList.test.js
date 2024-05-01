@@ -1,7 +1,7 @@
 import React from "react";
 import {render, screen, fireEvent, waitFor} from "@testing-library/react";
 import { act } from 'react-dom/test-utils';
-import MapList from "../src/pages/MapList";
+import MapList from "../src/Old/MapList";
 import '@testing-library/jest-dom/extend-expect';
 
 const authMock = {

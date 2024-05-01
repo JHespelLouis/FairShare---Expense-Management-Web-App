@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import '../styles/NewGame.css';
+import './NewGame.css';
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import {getAuth, onAuthStateChanged} from "firebase/auth";

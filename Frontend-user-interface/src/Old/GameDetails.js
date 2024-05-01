@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {redirect} from "react-router-dom";
-import '../styles/GameDetails.css'
+import './GameDetails.css'
 import Button from "@mui/material/Button";
 
 const GameDetails = (props) => {

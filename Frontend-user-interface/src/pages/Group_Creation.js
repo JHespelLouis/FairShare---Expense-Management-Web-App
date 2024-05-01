@@ -8,8 +8,10 @@ import {doc, getDoc, getFirestore} from "firebase/firestore";
 import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
+import {useAuth} from "../AuthContext";
 
 const GroupCreation = (props) => {
+        const user = useAuth();
         const apiUrl = process.env.REACT_APP_API_URL;
         const [title, setTitle] = useState('');
         const [description, setDescription] = useState('');
@@ -18,28 +20,11 @@ const GroupCreation = (props) => {
         const [isLoaded, setIsLoaded] = useState(false);
 
         useEffect(() => {
-            const auth = getAuth();
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    const uid = user.uid;
-                    setUserId(uid);
-                    const db = getFirestore();
-                    const docRef = doc(db, "users", uid);
-                    getDoc(docRef).then((docSnapshot) => {
-                        if (docSnapshot.exists()) {
-                            const userName = docSnapshot.data().firstname;
-                            setMembers([userName, '']);
-                            setMembers([userName, '']);
-                            setIsLoaded(true);
-                        } else {
-                            console.log("No such document!");
-                        }
-                    }).catch((error) => {
-                        console.log("Error getting document:", error);
-                    });
-                }
-            });
-        }, []);
+            if (user && user.uid) {
+                setMembers([user.userName, '']);
+                setIsLoaded(true);
+            }
+        }, [user]);
 
         const addMember = () => {
             if (members[members.length - 1].trim() === '') {
@@ -105,8 +90,6 @@ const GroupCreation = (props) => {
             });
         }
 
-        console.log(title, description, members)
-
         if (!isLoaded) {
             return (
                 <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
@@ -136,20 +119,20 @@ const GroupCreation = (props) => {
                         Members
                     </Typography>
                     {members.map((member, index) => (
-                        <div key={index} className="member-container" data-testid="member-container">
+                        <div key={index} className="member-container" data-testid="member-container" style={{ display: 'flex', alignItems: 'center' }}>
                             <TextField
                                 fullWidth
                                 label={index === 0 ? "My name" : "Other member"}
                                 value={member}
                                 onChange={(event) => updateMemberName(index, event.target.value)}
                                 variant="standard"
+                                style={{ flex: 1 }} // Allows the TextField to fill the available space, pushing the button to the right
                             />
                             {index < members.length - 1 && index != 0 && (
-                                <Button onClick={() => removeMember(index)} variant="outlined"><DeleteIcon/></Button>
+                                <Button onClick={() => removeMember(index)} variant="outlined" style={{ marginLeft: '10px' }}><DeleteIcon/></Button>
                             )}
                             {index === members.length - 1 && (
-                                <Button onClick={addMember} className={"addMemberButton"} name={"addMemberButton"}
-                                        variant="contained">
+                                <Button onClick={addMember} className={"addMemberButton"} name={"addMemberButton"} variant="contained" style={{ marginLeft: '10px' }}>
                                     Add
                                 </Button>
                             )}

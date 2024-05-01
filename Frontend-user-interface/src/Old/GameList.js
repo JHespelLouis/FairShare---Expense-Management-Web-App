@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import '../styles/GameList.css'
+import './GameList.css'
 import {redirect} from "react-router-dom";
 import NewGame from "./NewGame";
 import GameDetails from "./GameDetails";

@@ -1,48 +1,36 @@
-import '../styles/GameList.css'
+import '../Old/GameList.css'
 import React, {useEffect, useState} from 'react';
-import {redirect} from "react-router-dom";
-import {getAuth, onAuthStateChanged} from "firebase/auth";
-import Group_Creation from "./Group_Creation";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useLocation} from "react-router-dom";
 import {Box, ListItemButton, ListItemText, Divider, List, Fab, Toolbar, Typography, AppBar} from '@mui/material';
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import {grey} from "@mui/material/colors";
 import AddIcon from '@mui/icons-material/Add';
 import CircularProgress from "@mui/material/CircularProgress";
+import {useAuth} from '../AuthContext';
 
-const GroupList = (props) => {
+const GroupList = () => {
+    const user = useAuth();
+    const location = useLocation();
     const navigate = useNavigate();
     const apiUrl = process.env.REACT_APP_API_URL;
-    const [groups, setGroups] = useState([]);
+    const [group, setGroup] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
 
-    const handleDetails = (id) => {
-        console.log(groups[id].groupId);
-        navigate('/ex', {state: groups[id].groupId})
-    };
-
-    const fetchGroups = (uid) => {
-        fetch(`${apiUrl}api/user/${uid}`)
+    const fetchGroup = (uid) => {
+        fetch(`${apiUrl}api/group/${location.state}`)
             .then(response => response.ok ? response.json() : Promise.reject("Error fetching groups"))
             .then(data => {
-                setGroups(data);
+                setGroup(data);
                 setIsLoaded(true);
             })
             .catch(error => console.log('error: ' + error));
     };
 
     useEffect(() => {
-        const auth = getAuth();
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                fetchGroups(user.uid);
-            } else {
-                redirect('/login');
-            }
-        });
-    }, []);
+        if (user && user.uid) {
+            fetchGroup();
+        }
+    }, [user, navigate]);
 
-    if (!isLoaded) {
+    if (!isLoaded || !user) {
         return (
             <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
                 <CircularProgress/>
@@ -53,21 +41,21 @@ const GroupList = (props) => {
         <Box>
             <AppBar position="fixed" color="primary" style={{marginTop: 55, backgroundColor: "grey", height: 45}}>
                 <Toolbar>
-                    <Typography variant="h6">Groups</Typography>
+                    <Typography variant="h6">Group</Typography>
                 </Toolbar>
             </AppBar>
             <List component="nav">
-                {Object.keys(groups).length === 0 ? (
+                {Object.keys(group).length === 0 ? (
                     <ListItemText primary="You have no groups."/>
                 ) : (
-                    Object.keys(groups).map(id => (
+                    Object.keys(group).map(id => (
                         <React.Fragment key={id}>
                             <ListItemButton
-                                onClick={() => handleDetails(id)}
+                                onClick={() => navigate('/ex', {state: group[id].groupId})}
                             >
                                 <ListItemText
-                                    primary={groups[id].title}
-                                    secondary={groups[id].description || "No description"}
+                                    primary={group[id].title}
+                                    secondary={group[id].description || "No description"}
                                 />
                             </ListItemButton>
                             <Divider/>
@@ -76,7 +64,7 @@ const GroupList = (props) => {
                 )}
             </List>
             <Box sx={{position: 'fixed', bottom: 16, right: 16, zIndex: 1000}}>
-                <Fab color="primary" aria-label="add" onClick={() => navigate('/exc')}>
+                <Fab color="primary" aria-label="add" onClick={() => navigate('/grpc')}>
                     <AddIcon/>
                 </Fab>
             </Box>

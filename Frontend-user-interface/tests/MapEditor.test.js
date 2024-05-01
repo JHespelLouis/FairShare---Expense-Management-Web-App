@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import MapEditor from '../src/pages/MapEditor';
+import MapEditor from '../src/Old/MapEditor';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import { initializeApp } from "firebase/app";

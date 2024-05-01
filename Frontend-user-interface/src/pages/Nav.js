@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { AppBar, Box, Toolbar, Button, IconButton, Typography } from '@mui/material';
+import React from 'react';
+import { AppBar, Box, Toolbar, Button, IconButton } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { Link, Outlet, useLocation } from "react-router-dom";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { Link, Outlet } from "react-router-dom";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LoginIcon from '@mui/icons-material/Login';
+import { useAuth } from '../AuthContext'; // Ensure the import path is correct
 
 const darkTheme = createTheme({
     palette: {
@@ -16,44 +16,34 @@ const darkTheme = createTheme({
 });
 
 export default function Nav() {
-    const [user, setUser] = useState(null);
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            console.log("User is signed in");
-            setUser(user);
-        } else {
-            console.log("User is signed out");
-            setUser(null);
-        }
-    });
+    const user = useAuth(); // Destructure the user and possibly the authIsLoaded if you track the load state
 
     return (
         <>
             <ThemeProvider theme={darkTheme}>
                 <AppBar position="fixed">
-                    <Toolbar style={{ width: "auto", justifyContent: "space-between", alignItems: 'center' }}>
-                        <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>
+                    <Toolbar style={{width: "auto", justifyContent: "space-between", alignItems: 'center'}}>
+                        <Link to="/" style={{color: 'inherit', textDecoration: 'none'}}>
                             <IconButton>
                                 FairShare
                             </IconButton>
                         </Link>
-                        { user ? (
+                        {user && user.uid ? ( // Check if user exists and has a uid
                             <Link to="/myAccount" className="Button">
-                                <Button variant="outlined" endIcon={<AccountCircleIcon />}>
+                                <Button variant="outlined" endIcon={<AccountCircleIcon/>}>
                                     My Profile
                                 </Button>
                             </Link>
                         ) : (
                             <Link to="/login" className="Button">
-                                <Button variant="outlined" endIcon={<LoginIcon />}>
+                                <Button variant="outlined" endIcon={<LoginIcon/>}>
                                     Sign In/Register
                                 </Button>
                             </Link>
                         )}
                     </Toolbar>
                 </AppBar>
-                <Box style={{ height: 100}} /> {/* Adjust as necessary to compensate for total AppBar heights */}
+                <Box style={{height: 100}}/> {/* Adjust as necessary to compensate for total AppBar heights */}
             </ThemeProvider>
             <Outlet/>
         </>

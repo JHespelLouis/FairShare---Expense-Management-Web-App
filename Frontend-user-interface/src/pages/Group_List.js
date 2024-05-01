@@ -1,22 +1,16 @@
-import '../styles/GameList.css'
 import React, {useEffect, useState} from 'react';
-import {redirect} from "react-router-dom";
-import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {useNavigate} from "react-router-dom";
 import {Box, ListItemButton, ListItemText, Divider, List, Fab, Toolbar, Typography, AppBar} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CircularProgress from "@mui/material/CircularProgress";
+import {useAuth} from '../AuthContext';
 
 const GroupList = () => {
+    const user = useAuth();
     const navigate = useNavigate();
     const apiUrl = process.env.REACT_APP_API_URL;
     const [groups, setGroups] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
-
-    const handleDetails = (id) => {
-        console.log(groups[id].groupId);
-        navigate('/ex', {state: groups[id].groupId})
-    };
 
     const fetchGroups = (uid) => {
         fetch(`${apiUrl}api/user/${uid}`)
@@ -29,17 +23,12 @@ const GroupList = () => {
     };
 
     useEffect(() => {
-        const auth = getAuth();
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                fetchGroups(user.uid);
-            } else {
-                redirect('/login');
-            }
-        });
-    }, []);
+        if (user && user.uid) {
+            fetchGroups(user.uid);
+        }
+    }, [user, navigate]);
 
-    if (!isLoaded) {
+    if (!isLoaded || !user) {
         return (
             <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
                 <CircularProgress/>
@@ -60,7 +49,7 @@ const GroupList = () => {
                     Object.keys(groups).map(id => (
                         <React.Fragment key={id}>
                             <ListItemButton
-                                onClick={() => handleDetails(id)}
+                                onClick={() => navigate('/ex', {state: groups[id].groupId})}
                             >
                                 <ListItemText
                                     primary={groups[id].title}
