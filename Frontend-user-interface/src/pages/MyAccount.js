@@ -90,18 +90,18 @@ const MyAccount = () => {
             <Card elevation={10} style={{ backgroundColor: '#f5f5f5', border: '1px solid #f5f5f5', width: '80%', maxWidth: '500px', minWidth: '300px', height: '80%', maxHeight: '500px', minHeight: '300px' }}>
                 <CardContent>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-                        <Typography variant="h3" component="h1" className="account-title">Mon Compte</Typography>
+                        <Typography variant="h3" component="h1" className="account-title">My Account</Typography>
                         <Avatar sx={{ bgcolor: '#3F72AF' }}>
                             <AccountCircleIcon />
                         </Avatar>
                     </Box>
                     <List>
                         <ListItem>
-                            <ListItemText primary="Nom" secondary={userData ? userData.lastname : ''} />
+                            <ListItemText primary="Surname" secondary={userData ? userData.lastname : ''} />
                         </ListItem>
                         <Divider component="li" />
                         <ListItem>
-                            <ListItemText primary="Prénom" secondary={userData ? userData.firstname : ''} />
+                            <ListItemText primary="Firstname" secondary={userData ? userData.firstname : ''} />
                         </ListItem>
                         <Divider component="li" />
                         <ListItem>
@@ -109,10 +109,10 @@ const MyAccount = () => {
                         </ListItem>
                     </List>
                     <Box className="button-logout">
-                        <Button variant="contained" startIcon={<LogoutIcon />} onClick={logout}>Se déconnecter</Button>
+                        <Button variant="contained" startIcon={<LogoutIcon />} onClick={logout}>Disconnect</Button>
                     </Box>
                     <Box className="button-delete-account">
-                        <Button variant="contained" color="error" startIcon={<DeleteForeverIcon />} onClick={handleClickOpen}>Supprimer le compte</Button>
+                        <Button variant="contained" color="error" startIcon={<DeleteForeverIcon />} onClick={handleClickOpen}>Delete Account</Button>
                     </Box>
                     <Dialog 
                         open={open}

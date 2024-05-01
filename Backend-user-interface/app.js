@@ -12,6 +12,7 @@ const mapRouter = require('./routes/r_map');
 const sessionRouter = require('./routes/r_session');
 const groupRouter = require('./routes/r_group');
 const expenseRouter = require('./routes/r_expense');
+const userRouter = require('./routes/r_user');
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.use('/api/map', mapRouter);
 app.use('/api/session', sessionRouter);
 app.use('/api/group', groupRouter);
 app.use('/api/expense', expenseRouter);
+app.use('/api/user', userRouter);
 
 
 // catch 404 and forward to error handler

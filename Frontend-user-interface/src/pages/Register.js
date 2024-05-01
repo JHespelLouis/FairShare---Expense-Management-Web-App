@@ -60,23 +60,22 @@ const navigate = useNavigate();
     const password = data.get('password');
 
     if (!isValidName(firstname)) {
-      setFirstnameError('Le format du prénom est incorrect');
+      setFirstnameError('The format of the firstname is incorrect');
       return;
     }
   
     if (!isValidName(lastname)) {
-      setLastnameError('Le format du nom de famille est incorrect');
+      setLastnameError('The format of the lastname is incorrect');
       return;
     }    
 
     if (!isValidEmail(email)) {
-      setEmailError('Le format de l\'email est incorrect');
+      setEmailError('The format of the email is incorrect');
       return;
     }
 
-    // Vérification du format du mot de passe
     if (!isValidPassword(password)) {
-      setPasswordError('Le format du mot de passe est incorrect. Au moins 8 caractères, une lettre majuscule, une lettre minuscule et un chiffre.');
+      setPasswordError('The format of the password is incorrect. At least 8 characters with at least one uppercase letter, one lowercase letter and one digit');
       return;
     }
 
@@ -113,7 +112,7 @@ const navigate = useNavigate();
         const errorCode = error.code;
         const errorMessage = error.message;
         if (errorCode === 'auth/email-already-in-use') {
-          setAccountExistsError('Un compte existe déjà avec cet email');
+          setAccountExistsError('An account already exists with this email');
         } else {
           console.log(errorCode);
           console.log(errorMessage);
@@ -138,10 +137,10 @@ const navigate = useNavigate();
             <AccountCircleIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Inscrivez-vous
+            Register
           </Typography>
           <animated.div style={confirmationAnimation}>
-            <Typography variant="body1" style={{ color: confirmationAnimation.color }}>Le compte a été créé avec succès !</Typography>
+            <Typography variant="body1" style={{ color: confirmationAnimation.color }}>Account Created with success !</Typography>
           </animated.div>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -149,7 +148,7 @@ const navigate = useNavigate();
               required
               fullWidth
               id="firstname"
-              label="Prénom"
+              label="Firstname"
               name="firstname"
               autoComplete="firstname"
               autoFocus
@@ -161,7 +160,7 @@ const navigate = useNavigate();
               required
               fullWidth
               id="lastname"
-              label="Nom de famille"
+              label="Lastname"
               name="lastname"
               autoComplete="lastname"
               error={!!lastnameError}
