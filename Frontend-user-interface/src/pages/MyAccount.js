@@ -125,15 +125,15 @@ const MyAccount = () => {
                         </DialogTitle>
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">
-                                Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible!
+                                Are you sure you want to delete your account? This action is irreversible!
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleClose} color="primary">
-                                Annuler
+                                Cancer
                             </Button>
                             <Button onClick={deleteUser} color="error" autoFocus>
-                                Supprimer
+                                Delete
                             </Button>
                         </DialogActions>
                     </Dialog>

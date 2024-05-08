@@ -4,6 +4,6 @@ const router = express.Router();
 
 router.get('/:gid', userCtrl.getExpenses)
 router.get('/:gid/:eid', userCtrl.getExpense)
-router.post('/', userCtrl.postExpense)
+router.post('/:gid', userCtrl.postExpense)
 
 module.exports = router;

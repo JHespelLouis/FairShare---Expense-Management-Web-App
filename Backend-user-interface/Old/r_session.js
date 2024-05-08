@@ -1,4 +1,4 @@
-const userCtrl = require('../controllers/cl_session')
+const userCtrl = require('./cl_session')
 const express = require("express");
 const router = express.Router();
 

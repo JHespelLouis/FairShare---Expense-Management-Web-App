@@ -1,4 +1,4 @@
-const userCtrl = require('../controllers/cl_game')
+const userCtrl = require('./cl_game')
 const express = require("express");
 const router = express.Router();
 

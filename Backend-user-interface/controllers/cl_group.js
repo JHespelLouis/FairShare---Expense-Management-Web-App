@@ -1,32 +1,56 @@
 const {db} = require('../db.js');
 
-exports.getGroups = async (req, res) => {
+/*
+exports.getGroup = async (req, res) => {
     try {
-        const groupsCollection = db.collection(`users/${req.params.uid}/groups`);
+        const groupDocument = db.doc(`groups/${req.params.gid}/`);
+        const snapshot = await groupDocument.get();
 
-        const snapshot = await groupsCollection.get();
-
-        const groups = [];
-
-        snapshot.forEach((doc) => {
-            const groupData = doc.data();
-            groups.push({
-                groupId: doc.id,
+        if (!snapshot.exists) {
+            res.status(404)
+        } else {
+            const groupData = snapshot.data();
+            res.status(200).json({
+                groupId: snapshot.id,
                 ...groupData
             });
-        });
-
-        res.status(200).json(groups);
+        }
     } catch (error) {
         console.error('Error :', error);
         res.status(500).send('Internal Server Error');
     }
-
-}
+}*/
 
 exports.getGroup = async (req, res) => {
+    try {
+        const groupDocument = db.doc(`groups/${req.params.gid}`);
+        const snapshot = await groupDocument.get();
 
+        if (!snapshot.exists) {
+            res.status(404).send('Group not found');
+        } else {
+            const groupData = snapshot.data();
+            const expensesCollection = groupDocument.collection('expenses');
+            const expensesSnapshot = await expensesCollection.get();
+            const expenses = [];
+
+            expensesSnapshot.forEach(doc => {
+                expenses.push({ expenseId: doc.id, ...doc.data() });
+            });
+
+            res.status(200).json({
+                groupId: snapshot.id,
+                ...groupData,
+                expenses: expenses
+            });
+        }
+    } catch (error) {
+        console.error('Error :', error);
+        res.status(500).send('Internal Server Error');
+    }
 }
+
+
 
 exports.postGroup = async (req, res) => {
     try {
@@ -47,7 +71,7 @@ exports.postGroup = async (req, res) => {
             console.error(error);
             res.status(500).send('Internal Server Error');
         }
-        res.status(201).send('Group created with ID: ' + newDocId);
+        res.status(201).end();
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');

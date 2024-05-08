@@ -1,22 +1,23 @@
 import React, {useEffect, useState} from 'react';
 import '../styles/GroupCreation.css';
-import {Button, TextField, Box, Toolbar, AppBar} from "@mui/material";
+import {Button, TextField, Box, Toolbar, AppBar, IconButton} from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
-import {getAuth, onAuthStateChanged} from "firebase/auth";
 import DeleteIcon from '@mui/icons-material/Delete';
-import {doc, getDoc, getFirestore} from "firebase/firestore";
 import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import {useAuth} from "../AuthContext";
+import {ArrowBack} from "@mui/icons-material";
+import {useNavigate} from "react-router-dom";
+
 
 const GroupCreation = (props) => {
+        const navigate = useNavigate();
         const user = useAuth();
         const apiUrl = process.env.REACT_APP_API_URL;
         const [title, setTitle] = useState('');
         const [description, setDescription] = useState('');
         const [members, setMembers] = useState(['']);
-        const [userId, setUserId] = useState('');
         const [isLoaded, setIsLoaded] = useState(false);
 
         useEffect(() => {
@@ -47,34 +48,18 @@ const GroupCreation = (props) => {
             setMembers(updatedMembers);
         };
 
-        const dataVerificaiton = () => {
-            const emptyFields = [];
-            if (!title) {
-                emptyFields.push("Nom du match");
-            }
-            if (!members.every(member => member.trim() !== '')) {
-                emptyFields.push("Members");
-            }
-            if (emptyFields.length > 0) {
-                return false;
-            }
-            return true
-        }
-
         const submitForm = () => {
-            if (!dataVerificaiton()) {
-                return;
-            }
             const nonEmptyMembers = members.filter(member => member.trim() !== '');
             const formData = {
-                userId: userId,
+                userId: user.uid,
                 title: title,
                 description: description.trim().length === 0 ? '' : description,
                 members: nonEmptyMembers.map((member, index) => ({
                     name: member.trim(),
-                    id: index === 0 ? userId : "",
+                    id: index === 0 ? user.uid : "",
                 }))
             };
+            console.log(formData);
             fetch(`${apiUrl}api/group/`, {
                 method: 'POST',
                 headers: {
@@ -82,11 +67,13 @@ const GroupCreation = (props) => {
                 },
                 body: JSON.stringify(formData)
             }).then(response => {
-                return response.json();
-            }).then(res => {
-                if (res === 201) {
+                if (response.ok) { // This checks for any successful response (200-299)
+                    navigate(-1); // Navigate back on success
                 } else {
+                    throw new Error('Failed to create group. Status: ' + response.status);
                 }
+            }).catch(error => {
+                console.error('There was an error processing your request:', error);
             });
         }
 
@@ -97,10 +84,13 @@ const GroupCreation = (props) => {
                 </Box>
             );
         }
-        return (<div className="groupForm">
-                <AppBar position="fixed" color="primary" style={{marginTop: 55, backgroundColor: "grey", height: 45}}>
-                    <Toolbar>
-                        <Typography variant="h6">Groups</Typography>
+        return ( <Box style={{margin: '5%'}}>
+                <AppBar position="fixed" color="primary" style={{marginTop: 55, backgroundColor: "#595656", height: 45}}>
+                    <Toolbar >
+                        <IconButton edge="start" color="inherit" onClick={() => navigate(-1)} aria-label="back">
+                            <ArrowBack style={{marginBottom:'0.5em'}}/>
+                        </IconButton>
+                        <Typography variant="h6" style={{marginLeft: '0.5em', marginBottom: '0.5em'}}>New Group</Typography>
                     </Toolbar>
                 </AppBar>
                 <Box>
@@ -128,7 +118,7 @@ const GroupCreation = (props) => {
                                 variant="standard"
                                 style={{ flex: 1 }} // Allows the TextField to fill the available space, pushing the button to the right
                             />
-                            {index < members.length - 1 && index != 0 && (
+                            {index < members.length - 1 && index !== 0 && (
                                 <Button onClick={() => removeMember(index)} variant="outlined" style={{ marginLeft: '10px' }}><DeleteIcon/></Button>
                             )}
                             {index === members.length - 1 && (
@@ -144,7 +134,7 @@ const GroupCreation = (props) => {
                         </Button>
                     </DialogActions>
                 </Box>
-            </div>
+            </Box>
         );
     }
 ;

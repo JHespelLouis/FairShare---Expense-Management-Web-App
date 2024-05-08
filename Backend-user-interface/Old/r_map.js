@@ -1,4 +1,4 @@
-const userCtrl = require('../controllers/cl_map')
+const userCtrl = require('./cl_map')
 const express = require("express");
 const { upload } = require('../s3.js');
 const router = express.Router();

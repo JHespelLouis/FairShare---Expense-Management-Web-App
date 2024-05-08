@@ -1,6 +1,6 @@
 var express = require('express')
 var router = express.Router();
-const qrCtrl = require('../controllers/cl_qrcode')
+const qrCtrl = require('./cl_qrcode')
 require('dotenv').config()
 
 

@@ -1,182 +1,200 @@
-import React, {useEffect, useState} from 'react';
-import '../styles/GroupCreation.css';
-import {Button, TextField, Box, Toolbar, AppBar} from "@mui/material";
-import DialogActions from "@mui/material/DialogActions";
-import {getAuth, onAuthStateChanged} from "firebase/auth";
-import DeleteIcon from '@mui/icons-material/Delete';
-import {doc, getDoc, getFirestore} from "firebase/firestore";
-import CircularProgress from '@mui/material/CircularProgress';
-import Divider from '@mui/material/Divider';
+import React, { useState, useEffect } from 'react';
+import {
+    TextField,
+    Box,
+    Toolbar,
+    AppBar,
+    InputLabel,
+    Select,
+    FormControl,
+    MenuItem,
+    ListItemText,
+    List,
+    ListItem,
+    ListItemIcon,
+    Divider,
+    Checkbox,
+    IconButton,
+    Paper,
+    styled,
+    InputAdornment
+} from "@mui/material";
 import Typography from '@mui/material/Typography';
+import { ArrowBack, Check } from "@mui/icons-material";
+import { useNavigate, useLocation } from "react-router-dom";
+import dayjs from 'dayjs';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-const GroupCreation = (props) => {
-        const apiUrl = process.env.REACT_APP_API_URL;
-        const [title, setTitle] = useState('');
-        const [description, setDescription] = useState('');
-        const [members, setMembers] = useState(['']);
-        const [userId, setUserId] = useState('');
-        const [isLoaded, setIsLoaded] = useState(false);
-        const [group, setGroup] = useState([]);
+const GroupCreation = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const apiUrl = process.env.REACT_APP_API_URL;
+    const [title, setTitle] = useState('');
+    const [groupData, setGroupData] = useState(location.state);
+    const [selectedMember, setSelectedMember] = useState(0);
+    const [selectedMembers, setSelectedMembers] = useState([]);
+    const [amount, setAmount] = useState('');
+    const isSubmitDisabled = !title || !amount || selectedMembers.length === 0;
 
-        useEffect(() => {
-            const auth = getAuth();
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    const uid = user.uid;
-                    setUserId(uid);
-                    //fetchGroupInfo(gid)
-                    const db = getFirestore();
-                    const docRef = doc(db, "users", uid);
-                    getDoc(docRef).then((docSnapshot) => {
-                        if (docSnapshot.exists()) {
-                            const userName = docSnapshot.data().firstname;
-                            setMembers([userName, '']);
-                            setMembers([userName, '']);
-                            setIsLoaded(true);
-                        } else {
-                            console.log("No such document!");
-                        }
-                    }).catch((error) => {
-                        console.log("Error getting document:", error);
-                    });
-                }
-            });
-        }, []);
+    useEffect(() => {
+        if (groupData && groupData.members) {
+            setSelectedMembers(groupData.members.map((_, index) => index));
+        }
+    }, [groupData]);
 
-        const fetchGroupInfo = (gid) => {
-            fetch(`${apiUrl}api/group/${gid}`)
-                .then(response => response.ok ? response.json() : Promise.reject("Error fetching groups"))
-                .then(data => {
-                    setGroup(data);
-                    setIsLoaded(true);
-                })
-                .catch(error => console.log('error: ' + error));
-        };
+    const handleCheckboxChange = (index) => {
+        const currentIndex = selectedMembers.indexOf(index);
+        const newChecked = [...selectedMembers];
 
-        const addMember = () => {
-            if (members[members.length - 1].trim() === '') {
-                return;
-            }
-            setMembers([...members, '']);
-        };
-
-        const removeMember = (index) => {
-            if (members.length > 2) {
-                const updatedMembers = [...members];
-                updatedMembers.splice(index, 1);
-                setMembers(updatedMembers);
-            }
-        };
-
-        const updateMemberName = (index, memberName) => {
-            const updatedMembers = [...members];
-            updatedMembers[index] = memberName;
-            setMembers(updatedMembers);
-        };
-
-        const dataVerificaiton = () => {
-            const emptyFields = [];
-            if (!title) {
-                emptyFields.push("Nom du match");
-            }
-            if (!members.every(member => member.trim() !== '')) {
-                emptyFields.push("Members");
-            }
-            if (emptyFields.length > 0) {
-                return false;
-            }
-            return true
+        if (currentIndex === -1) {
+            newChecked.push(index);
+        } else {
+            newChecked.splice(currentIndex, 1);
         }
 
-        const submitForm = () => {
-            if (!dataVerificaiton()) {
-                return;
+        setSelectedMembers(newChecked);
+    };
+
+    const handleToggleAll = () => {
+        if (selectedMembers.length === groupData.members.length) {
+            setSelectedMembers([]);
+        } else {
+            setSelectedMembers(groupData.members.map((_, index) => index));
+        }
+    };
+
+    const getDividedAmount = () => {
+        const numMembers = selectedMembers.length;
+        const totalAmount = parseFloat(amount) || 0;
+        return numMembers > 0 ? (totalAmount / numMembers).toFixed(2) : '0.00';
+    };
+
+    const Item = styled(Paper)(({ theme }) => ({
+        backgroundColor: "#595656",
+        padding: theme.spacing(1),
+        color: "white",
+    }));
+
+    const submitForm = () => {
+        const formData = {
+            title: title,
+            amount: amount,
+            date: dayjs().format('YYYY-MM-DD'),
+            paidBy: {uid: groupData.members[selectedMember].id, name: groupData.members[selectedMember].name},
+            forWho: selectedMembers.map((index) => ({uid: groupData.members[index].id, name: groupData.members[index].name})),
+        };
+        console.log(formData);
+        fetch(`${apiUrl}api/expense/${groupData.groupId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        }).then(response => {
+            console.log("wow")
+            return response.json();
+        }).then(res => {
+            if (res === 201) {
+                console.log("success")
+            } else {
             }
-            const nonEmptyMembers = members.filter(member => member.trim() !== '');
-            const formData = {
-                userId: userId,
-                title: title,
-                description: description.trim().length === 0 ? '' : description,
-                members: nonEmptyMembers.map((member, index) => ({
-                    name: member.trim(),
-                    id: index === 0 ? userId : "",
-                }))
-            };
-            fetch(`${apiUrl}api/group/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            }).then(response => {
-                return response.json();
-            }).then(res => {
-                if (res === 201) {
-                } else {
-                }
-            });
-        }
-
-        console.log(title, description, members)
-
-        if (!isLoaded) {
-            return (
-                <Box sx={{display: 'flex'}}>
-                    <CircularProgress/>
-                </Box>
-            );
-            ;
-        }
-        return (<div className="groupForm">
-                <AppBar position="fixed" color="primary" style={{marginTop: 55, backgroundColor: "grey", height: 45}}>
-                    <Toolbar>
-                        <Typography variant="h6">Groups</Typography>
-                    </Toolbar>
-                </AppBar>
-                <Box>
-                    <TextField fullWidth id="Title" label="Title" value={title}
-                               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                   setTitle(event.target.value);
-                               }} variant="standard"/>
-                    <TextField fullWidth id="Description" label="Description" value={description}
-                               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                   setDescription(event.target.value);
-                               }} variant="standard"/>
-                </Box>
-                <Divider/>
-                <Box>
-                    <Typography variant="h6" gutterBottom>
-                        Members
-                    </Typography>
-                    {members.map((member, index) => (
-                        <div key={index} className="member-container" data-testid="member-container">
-                            <TextField
-                                fullWidth
-                                label={index === 0 ? "My name" : "Other member"}
-                                value={member}
-                                onChange={(event) => updateMemberName(index, event.target.value)}
-                                variant="standard"
-                            />
-                            {index < members.length - 1 && index != 0 && (
-                                <Button onClick={() => removeMember(index)} variant="outlined"><DeleteIcon/></Button>
-                            )}
-                            {index === members.length - 1 && (
-                                <Button onClick={addMember} className={"addMemberButton"} name={"addMemberButton"}
-                                        variant="contained">
-                                    Add
-                                </Button>
-                            )}
-                        </div>
-                    ))}
-                    <DialogActions>
-                        <Button onClick={submitForm}>
-                            Submit
-                        </Button>
-                    </DialogActions>
-                </Box>
-            </div>
-        );
+        });
     }
-;
+
+
+    return (
+        <Box>
+            <AppBar position="fixed" color="primary" style={{ marginTop: 55, backgroundColor: "#595656", height: 45 }}>
+                <Toolbar>
+                    <IconButton edge="start" color="inherit" onClick={() => navigate(-1)} aria-label="back" style={{marginBottom:'0.5em'}}>
+                        <ArrowBack />
+                    </IconButton>
+                    <Typography variant="h6" style={{ marginLeft: '20px', marginBottom: '0.5em' }}>New expense</Typography>
+                    <IconButton
+                        color="inherit"
+                        aria-label="submit"
+                        style={{ marginLeft: 'auto', marginBottom: '0.5em' }}
+                        disabled={isSubmitDisabled}
+                        onClick={() => submitForm()} // Implement your submission logic here
+                    >
+                        <Check />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
+            <Box style={{ margin: '0.8em' }}>
+                <TextField fullWidth id="Title" label="Title" value={title} onChange={(e) => setTitle(e.target.value)}
+                           style={{ marginTop: '0em', marginBottom: '0.5em' }}
+                           variant="standard"/>
+                <TextField type="number" fullWidth id="Amount" label="Amount $" value={amount}
+                           onChange={(e) => setAmount(e.target.value)} style={{ marginBottom: '1em' }}
+                           variant="standard"/>
+                <Box style={{ marginTop: '0.5em', marginBottom: '0em' }}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker label="Date" defaultValue={dayjs()} format="LL"/>
+                    </LocalizationProvider>
+                </Box>
+                <FormControl fullWidth variant="standard" style={{ marginTop: '0.6em', marginBottom: '0em' }}>
+                    <InputLabel id="demo-simple-select-standard-label">Paid by</InputLabel>
+                    <Select
+                        labelId="demo-multiple-checkbox-label"
+                        id="demo-multiple-checkbox"
+                        value={selectedMember}
+                        onChange={(event) => setSelectedMember(event.target.value)}
+                        renderValue={(selected) => groupData.members[selected].name}
+                    >
+                        {groupData.members.map((member, index) => (
+                            <MenuItem key={index} value={index}>
+                                <ListItemText primary={member.name}/>
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </Box>
+            <Divider/>
+            <Box>
+                <Item>
+                    <Checkbox
+                        edge="start"
+                        checked={selectedMembers.length === groupData.members.length}
+                        tabIndex={-1}
+                        disableRipple
+                        onChange={handleToggleAll}
+                        style={{marginLeft: "0em"}}
+                    />    For Who</Item>
+                <List>
+                    {groupData.members.map((member, index) => (
+                        <React.Fragment key={index}>
+                            <ListItem>
+                                <ListItemIcon>
+                                    <Checkbox
+                                        edge="start"
+                                        checked={selectedMembers.indexOf(index) > -1}
+                                        tabIndex={-1}
+                                        disableRipple
+                                        inputProps={{ 'aria-labelledby': `checkbox-list-label-${index}` }}
+                                        onChange={() => handleCheckboxChange(index)}
+                                    />
+                                </ListItemIcon>
+                                <ListItemText id={`checkbox-list-label-${index}`} primary={member.name}/>
+                                <TextField
+                                    type="number"
+                                    variant="standard"
+                                    value={selectedMembers.indexOf(index) > -1 ? getDividedAmount() : '0.00'}
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                    }}
+                                    disabled={selectedMembers.indexOf(index) === -1}
+                                    style={{ width: '30%', textAlign: 'right' }}
+                                />
+                            </ListItem>
+                            {index < groupData.members.length - 1 && <Divider/>}
+                        </React.Fragment>
+                    ))}
+                </List>
+            </Box>
+        </Box>
+    );
+};
 
 export default GroupCreation;
