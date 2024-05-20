@@ -2,13 +2,14 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBbC6KF94i5NcjVovs-vYLZwAJ0kXHDEvQ",
-  authDomain: "fairshare-ca802.firebaseapp.com",
-  projectId: "fairshare-ca802",
-  storageBucket: "fairshare-ca802.appspot.com",
-  messagingSenderId: "794414846093",
-  appId: "1:794414846093:web:c99399888ecb6f621a92c4"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
+
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
 const auth = app.auth();
