@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     TextField,
     Box,
@@ -20,13 +20,13 @@ import {
     InputAdornment
 } from "@mui/material";
 import Typography from '@mui/material/Typography';
-import { ArrowBack, Check } from "@mui/icons-material";
-import { useNavigate, useLocation } from "react-router-dom";
+import {ArrowBack, Check} from "@mui/icons-material";
+import {useNavigate, useLocation} from "react-router-dom";
 import dayjs from 'dayjs';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {DatePicker, LocalizationProvider} from '@mui/x-date-pickers';
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 
-const GroupCreation = () => {
+const ExpenseCreation = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const apiUrl = process.env.REACT_APP_API_URL;
@@ -70,7 +70,7 @@ const GroupCreation = () => {
         return numMembers > 0 ? (totalAmount / numMembers).toFixed(2) : '0.00';
     };
 
-    const Item = styled(Paper)(({ theme }) => ({
+    const Item = styled(Paper)(({theme}) => ({
         backgroundColor: "#595656",
         padding: theme.spacing(1),
         color: "white",
@@ -81,8 +81,13 @@ const GroupCreation = () => {
             title: title,
             amount: amount,
             date: dayjs().format('YYYY-MM-DD'),
-            paidBy: {uid: groupData.members[selectedMember].id, name: groupData.members[selectedMember].name},
-            forWho: selectedMembers.map((index) => ({uid: groupData.members[index].id, name: groupData.members[index].name})),
+            createdAt: new Date(),
+            paidBy: {uid: groupData.members[selectedMember].id, name: groupData.members[selectedMember].name, guid: groupData.members[selectedMember].guid},
+            forWho: selectedMembers.map((index) => ({
+                uid: groupData.members[index].id,
+                name: groupData.members[index].name,
+                guid: groupData.members[index].guid
+            })),
         };
         console.log(formData);
         fetch(`${apiUrl}api/expense/${groupData.groupId}`, {
@@ -92,49 +97,49 @@ const GroupCreation = () => {
             },
             body: JSON.stringify(formData)
         }).then(response => {
-            console.log("wow")
-            return response.json();
-        }).then(res => {
-            if (res === 201) {
-                console.log("success")
+            if (response.status === 201) {
+                console.log("success");
+                navigate(-1); // Navigate back after successful submission
             } else {
+                console.log("Failed to add expense");
             }
         });
     }
 
-
     return (
         <Box>
-            <AppBar position="fixed" color="primary" style={{ marginTop: 55, backgroundColor: "#595656", height: 45 }}>
+            <AppBar position="fixed" color="primary" style={{marginTop: 55, backgroundColor: "#595656", height: 45}}>
                 <Toolbar>
-                    <IconButton edge="start" color="inherit" onClick={() => navigate(-1)} aria-label="back" style={{marginBottom:'0.5em'}}>
-                        <ArrowBack />
+                    <IconButton edge="start" color="inherit" onClick={() => navigate(-1)} aria-label="back"
+                                style={{marginBottom: '0.5em'}}>
+                        <ArrowBack/>
                     </IconButton>
-                    <Typography variant="h6" style={{ marginLeft: '20px', marginBottom: '0.5em' }}>New expense</Typography>
+                    <Typography variant="h6" style={{marginLeft: '20px', marginBottom: '0.5em'}}>New
+                        expense</Typography>
                     <IconButton
                         color="inherit"
                         aria-label="submit"
-                        style={{ marginLeft: 'auto', marginBottom: '0.5em' }}
+                        style={{marginLeft: 'auto', marginBottom: '0.5em'}}
                         disabled={isSubmitDisabled}
                         onClick={() => submitForm()} // Implement your submission logic here
                     >
-                        <Check />
+                        <Check/>
                     </IconButton>
                 </Toolbar>
             </AppBar>
-            <Box style={{ margin: '0.8em' }}>
+            <Box style={{margin: '0.8em'}}>
                 <TextField fullWidth id="Title" label="Title" value={title} onChange={(e) => setTitle(e.target.value)}
-                           style={{ marginTop: '0em', marginBottom: '0.5em' }}
+                           style={{marginTop: '0em', marginBottom: '0.5em'}}
                            variant="standard"/>
                 <TextField type="number" fullWidth id="Amount" label="Amount $" value={amount}
-                           onChange={(e) => setAmount(e.target.value)} style={{ marginBottom: '1em' }}
+                           onChange={(e) => setAmount(e.target.value)} style={{marginBottom: '1em'}}
                            variant="standard"/>
-                <Box style={{ marginTop: '0.5em', marginBottom: '0em' }}>
+                <Box style={{marginTop: '0.5em', marginBottom: '0em'}}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker label="Date" defaultValue={dayjs()} format="LL"/>
                     </LocalizationProvider>
                 </Box>
-                <FormControl fullWidth variant="standard" style={{ marginTop: '0.6em', marginBottom: '0em' }}>
+                <FormControl fullWidth variant="standard" style={{marginTop: '0.6em', marginBottom: '0em'}}>
                     <InputLabel id="demo-simple-select-standard-label">Paid by</InputLabel>
                     <Select
                         labelId="demo-multiple-checkbox-label"
@@ -161,7 +166,7 @@ const GroupCreation = () => {
                         disableRipple
                         onChange={handleToggleAll}
                         style={{marginLeft: "0em"}}
-                    />    For Who</Item>
+                    /> For Who</Item>
                 <List>
                     {groupData.members.map((member, index) => (
                         <React.Fragment key={index}>
@@ -172,7 +177,7 @@ const GroupCreation = () => {
                                         checked={selectedMembers.indexOf(index) > -1}
                                         tabIndex={-1}
                                         disableRipple
-                                        inputProps={{ 'aria-labelledby': `checkbox-list-label-${index}` }}
+                                        inputProps={{'aria-labelledby': `checkbox-list-label-${index}`}}
                                         onChange={() => handleCheckboxChange(index)}
                                     />
                                 </ListItemIcon>
@@ -185,7 +190,7 @@ const GroupCreation = () => {
                                         startAdornment: <InputAdornment position="start">$</InputAdornment>,
                                     }}
                                     disabled={selectedMembers.indexOf(index) === -1}
-                                    style={{ width: '30%', textAlign: 'right' }}
+                                    style={{width: '30%', textAlign: 'right'}}
                                 />
                             </ListItem>
                             {index < groupData.members.length - 1 && <Divider/>}
@@ -197,4 +202,4 @@ const GroupCreation = () => {
     );
 };
 
-export default GroupCreation;
+export default ExpenseCreation;

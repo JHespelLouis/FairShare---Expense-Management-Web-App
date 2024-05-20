@@ -1,1 +1,1 @@
-# Tricount--like-web-app
+# FairShare---Expense-Management-Web-App

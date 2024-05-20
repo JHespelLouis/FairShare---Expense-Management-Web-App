@@ -57,6 +57,7 @@ const GroupCreation = (props) => {
                 members: nonEmptyMembers.map((member, index) => ({
                     name: member.trim(),
                     id: index === 0 ? user.uid : "",
+                    guid: index
                 }))
             };
             console.log(formData);
