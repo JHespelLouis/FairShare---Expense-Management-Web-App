@@ -78,3 +78,34 @@ exports.postGroup = async (req, res) => {
     }
 }
 
+exports.joinGroup = async (req, res) => {
+    console.log(req.body)
+    try {
+        const groupDocument = db.doc(`groups/${req.body.groupId}`);
+        const snapshot = await groupDocument.get();
+
+        if (!snapshot.exists) {
+            res.status(404).send('Group not found');
+        } else {
+            const groupData = snapshot.data();
+            const updatedData = {...groupData, ...req.body};
+
+            await groupDocument.set(updatedData);
+            res.status(200).end();
+        }
+        try{
+            const userCollection = db.collection(`users/${req.params.uid}/groups`);
+            await userCollection.doc(req.body.groupId).set({
+                title: req.body.title,
+                description: req.body.description
+            });
+        } catch (error) {
+            console.error('Error :', error);
+            res.status(500).send('Internal Server Error');
+        }
+    } catch (error) {
+        console.error('Error :', error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+

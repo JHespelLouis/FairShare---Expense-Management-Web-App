@@ -1,13 +1,15 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
+    const location = useLocation();
+    console.log(location.pathname)
 
     useEffect(() => {
         const auth = getAuth();
@@ -31,7 +33,7 @@ export const AuthProvider = ({ children }) => {
                     console.error("Error getting document:", error);
                     setUser(null);
                 });
-            } else {
+            } else if (location.pathname !== '/Register') {
                 navigate('/login');
             }
         });

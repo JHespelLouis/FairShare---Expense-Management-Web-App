@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigate, useLocation} from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from "react-router-dom";
 import {
     Box,
     ListItemButton,
@@ -18,9 +18,10 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import {useAuth} from '../AuthContext';
-import {ArrowBack} from "@mui/icons-material";
+import { useAuth } from '../AuthContext';
+import { ArrowBack } from "@mui/icons-material";
 import BalanceList from './BalanceList';
+import GroupInvitation from './GroupInvitation'; // Import the new component
 
 const ExpenseList = () => {
     const user = useAuth();
@@ -116,6 +117,7 @@ const ExpenseList = () => {
                     <AddIcon/>
                 </Fab>
             </Box>
+            <GroupInvitation groupId={groupData.groupId} />
         </Box>
     );
 };

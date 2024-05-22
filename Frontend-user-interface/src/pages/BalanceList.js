@@ -64,7 +64,7 @@ const BalanceList = ({expenses, groupData}) => {
 
     const balances = calculateBalances(expenses, groupData);
     const settlements = calculateSettlements(balances);
-    const maxBalance = Math.max(...Object.values(balances).map(balance => Math.abs(balance.balance))); // Find max balance for scaling
+    const maxBalance = Math.max(...Object.values(balances).map(balance => Math.abs(balance.balance)));
 
     return (
         <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>

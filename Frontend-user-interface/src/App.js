@@ -8,8 +8,9 @@ import Register from "./pages/Register";
 import MyAccount from "./pages/MyAccount";
 import GroupList from "./pages/GroupList";
 import GroupCreation from "./pages/GroupCreation";
-import ExpenseCreation from "./pages/Expense_Creation";
+import ExpenseCreation from "./pages/ExpenseCreation";
 import ExpenseList from "./pages/ExpenseList";
+import JoinGroup from './pages/JoinGroup';
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                         <Route path="grpc" element={<GroupCreation/>}/>
                         <Route path="ex" element={<ExpenseList/>}/>
                         <Route path="exc" element={<ExpenseCreation/>}/>
+                        <Route path="invite/:groupId" element={<JoinGroup />} />
                     </Route>
                 </Routes>
             </AuthProvider>
