@@ -89,7 +89,6 @@ const ExpenseCreation = () => {
                 guid: groupData.members[index].guid
             })),
         };
-        console.log(formData);
         fetch(`${apiUrl}api/expense/${groupData.groupId}`, {
             method: 'POST',
             headers: {
@@ -98,7 +97,6 @@ const ExpenseCreation = () => {
             body: JSON.stringify(formData)
         }).then(response => {
             if (response.status === 201) {
-                console.log("success");
                 navigate(-1); // Navigate back after successful submission
             } else {
                 console.log("Failed to add expense");

@@ -54,10 +54,7 @@ const JoinGroup = () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ ...groupData, members: updatedMembers })
-            }).then(response => response.ok ? response.json() : Promise.reject("Error updating group"))
-                .then(data => {
-                    setMessage('You have successfully joined the group.');
-                })
+            }).then(response => response.ok ? navigate('/ex', {state: groupId}) : Promise.reject("Error updating group"))
                 .catch(error => console.log('error: ' + error));
         }
     };

@@ -91,7 +91,6 @@ exports.joinGroup = async (req, res) => {
             const updatedData = {...groupData, ...req.body};
 
             await groupDocument.set(updatedData);
-            res.status(200).end();
         }
         try{
             const userCollection = db.collection(`users/${req.params.uid}/groups`);
@@ -103,6 +102,7 @@ exports.joinGroup = async (req, res) => {
             console.error('Error :', error);
             res.status(500).send('Internal Server Error');
         }
+        res.status(200).end();
     } catch (error) {
         console.error('Error :', error);
         res.status(500).send('Internal Server Error');
