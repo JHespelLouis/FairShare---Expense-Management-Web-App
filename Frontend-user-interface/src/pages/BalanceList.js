@@ -58,7 +58,6 @@ const BalanceList = ({expenses, groupData}) => {
                 creditors[0][1].balance -= amountToSettle;
             }
         }
-        console.log(settlements);
         return settlements;
     };
 

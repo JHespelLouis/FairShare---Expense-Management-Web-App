@@ -59,8 +59,6 @@ const JoinGroup = () => {
         }
     };
 
-    console.log(groupData)
-
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
             {isLoaded ? (

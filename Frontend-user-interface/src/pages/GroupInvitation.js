@@ -9,7 +9,6 @@ const GroupInvitation = (props) => {
         setOpen(true);
         navigator.clipboard.writeText(window.location.origin.toString()+"/invite/"+props.groupId.toString());
     };
-    console.log(props.groupId)
 
     return (
         <>

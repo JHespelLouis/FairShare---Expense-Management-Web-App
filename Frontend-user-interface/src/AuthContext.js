@@ -9,7 +9,6 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
-    console.log(location.pathname)
 
     useEffect(() => {
         const auth = getAuth();

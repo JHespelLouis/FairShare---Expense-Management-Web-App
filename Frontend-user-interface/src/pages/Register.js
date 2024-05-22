@@ -83,7 +83,6 @@ export default function Register() {
             .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
-                console.log(user);
 
                 // Ajout des données dans Firestore
                 const db = getFirestore();

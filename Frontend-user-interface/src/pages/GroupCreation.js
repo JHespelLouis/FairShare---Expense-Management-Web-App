@@ -60,7 +60,6 @@ const GroupCreation = (props) => {
                     guid: index
                 }))
             };
-            console.log(formData);
             fetch(`${apiUrl}api/group/`, {
                 method: 'POST',
                 headers: {
