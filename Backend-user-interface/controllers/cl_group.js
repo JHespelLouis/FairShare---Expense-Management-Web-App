@@ -79,7 +79,6 @@ exports.postGroup = async (req, res) => {
 }
 
 exports.joinGroup = async (req, res) => {
-    console.log(req.body)
     try {
         const groupDocument = db.doc(`groups/${req.body.groupId}`);
         const snapshot = await groupDocument.get();

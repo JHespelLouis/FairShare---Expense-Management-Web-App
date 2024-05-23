@@ -11,6 +11,7 @@ import GroupCreation from "./pages/GroupCreation";
 import ExpenseCreation from "./pages/ExpenseCreation";
 import ExpenseList from "./pages/ExpenseList";
 import JoinGroup from './pages/JoinGroup';
+import ExpenseDetails from './pages/ExpenseDetails';
 
 function App() {
     return (
@@ -26,6 +27,7 @@ function App() {
                         <Route path="ex" element={<ExpenseList/>}/>
                         <Route path="exc" element={<ExpenseCreation/>}/>
                         <Route path="invite/:groupId" element={<JoinGroup />} />
+                        <Route path="exd" element={<ExpenseDetails />} />
                     </Route>
                 </Routes>
             </AuthProvider>

@@ -52,7 +52,7 @@ const ExpenseList = () => {
                 {expenses.map(expense => (
                     <React.Fragment key={expense.expenseId}>
                         <ListItemButton
-                            onClick={() => navigate('/expense-details', {state: expense.expenseId})}
+                            onClick={() => navigate('/exd', {state: {expense: expense, group: groupData}})}
                         >
                             <ListItemText
                                 primary={<span><span>{expense.title}</span><span
@@ -113,7 +113,7 @@ const ExpenseList = () => {
             {value === 1 ?
                 <BalanceList expenses={expenses} groupData={groupData}/> : renderExpensesList(expenses, user)}
             <Box sx={{position: 'fixed', bottom: 16, right: 16, zIndex: 1000}}>
-                <Fab color="primary" aria-label="add" onClick={() => navigate('/exc', {state: groupData})}>
+                <Fab color="primary" aria-label="add" onClick={() => navigate('/exc', {state: groupData, gid: groupData.groupId})}>
                     <AddIcon/>
                 </Fab>
             </Box>
