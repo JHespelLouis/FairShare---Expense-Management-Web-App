@@ -64,7 +64,7 @@ export function Login() {
                             required
                             fullWidth
                             id="email"
-                            label="Adresse email"
+                            label="Email address"
                             name="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -78,7 +78,7 @@ export function Login() {
                             name="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            label="Mot de passe"
+                            label="Password"
                             type="password"
                             id="password"
                             autoComplete="current-password"
@@ -90,20 +90,20 @@ export function Login() {
                             variant="contained"
                             sx={{mt: 3, mb: 2}}
                         >
-                            Se connecter
+                            Connect
                         </Button>
                         <Grid container>
                             <Grid item xs>
                                 <Link href="#" variant="body2">
                                     <muiLink variant="body2">
-                                        {"Mot de passe oublié?"}
+                                        {"Forgot password?"}
                                     </muiLink>
                                 </Link>
                             </Grid>
                             <Grid item>
                                 <Link to="/Register">
                                     <muiLink variant="body2">
-                                        {"Pas de compte ? Inscrivez-vous"}
+                                        {"Don't have an account? Sign Up"}
                                     </muiLink>
                                 </Link>
                             </Grid>

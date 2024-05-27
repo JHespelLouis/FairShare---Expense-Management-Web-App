@@ -76,6 +76,7 @@ exports.updateGroup = async (req, res) => {
     }
 }
 
+
 exports.deleteGroup = async (req, res) => {
     try {
         const groupDocument = db.doc(`groups/${req.params.gid}`);
