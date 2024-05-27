@@ -78,9 +78,9 @@ exports.postGroup = async (req, res) => {
     }
 }
 
-exports.joinGroup = async (req, res) => {
+exports.updateGroup = async (req, res) => {
     try {
-        const groupDocument = db.doc(`groups/${req.body.groupId}`);
+        const groupDocument = db.doc(`groups/${req.params.gid}`);
         const snapshot = await groupDocument.get();
 
         if (!snapshot.exists) {
@@ -91,20 +91,46 @@ exports.joinGroup = async (req, res) => {
 
             await groupDocument.set(updatedData);
         }
-        try{
-            const userCollection = db.collection(`users/${req.params.uid}/groups`);
-            await userCollection.doc(req.body.groupId).set({
-                title: req.body.title,
-                description: req.body.description
-            });
-        } catch (error) {
-            console.error('Error :', error);
-            res.status(500).send('Internal Server Error');
-        }
         res.status(200).end();
     } catch (error) {
         console.error('Error :', error);
         res.status(500).send('Internal Server Error');
     }
 }
+
+exports.deleteGroup = async (req, res) => {
+    try {
+        const groupDocument = db.doc(`groups/${req.params.gid}`);
+        const snapshot = await groupDocument.get();
+
+        if (!snapshot.exists) {
+            res.status(404).send('Group not found');
+            return;
+        }
+
+        const groupData = snapshot.data();
+
+        // Update each member's personal list to remove the group
+        const memberPromises = groupData.members.map(async (member) => {
+            if (member.id) {
+                const userDocument = db.doc(`users/${member.id}/groups/${req.params.gid}`);
+                const userSnapshot = await userDocument.get();
+                if (userSnapshot.exists) {
+                    await userDocument.delete();
+                }
+            }
+        });
+
+        await Promise.all(memberPromises);
+
+        // Delete the group document
+        await groupDocument.delete();
+
+        res.status(200).end();
+    } catch (error) {
+        console.error('Error :', error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
 

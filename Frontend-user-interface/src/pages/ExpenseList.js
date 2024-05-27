@@ -14,6 +14,7 @@ import {
     BottomNavigation,
     BottomNavigationAction,
     CircularProgress,
+    Button
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
@@ -21,7 +22,7 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { useAuth } from '../AuthContext';
 import { ArrowBack } from "@mui/icons-material";
 import BalanceList from './BalanceList';
-import GroupInvitation from './GroupInvitation'; // Import the new component
+import GroupInvitation from './GroupInvitation';
 
 const ExpenseList = () => {
     const user = useAuth();
@@ -36,7 +37,7 @@ const ExpenseList = () => {
     useEffect(() => {
         if (user && user.uid) {
             fetch(`${apiUrl}api/group/${location.state}`)
-                .then(response => response.ok ? response.json() : Promise.reject("Error fetching groups"))
+                .then(response => response.ok ? response.json() : Promise.reject("Error fetching group"))
                 .then(data => {
                     setGroupData(data);
                     setExpenses(data.expenses || []);
@@ -86,7 +87,7 @@ const ExpenseList = () => {
             </Box>
         );
     }
-
+    console.log(groupData)
     return (
         <Box>
             <AppBar position="fixed" color="primary" style={{marginTop: 55, backgroundColor: "#595656", height: 45}}>
@@ -94,8 +95,14 @@ const ExpenseList = () => {
                     <IconButton edge="start" color="inherit" onClick={() => navigate(-1)} aria-label="back">
                         <ArrowBack style={{marginBottom: '0.5em'}}/>
                     </IconButton>
-                    <Typography variant="h6"
-                                style={{marginLeft: '0.5em', marginBottom: '0.5em'}}>{groupData.title}</Typography>
+                    <Typography variant="h6" style={{marginLeft: '0.5em', marginBottom: '0.5em'}}>{groupData.title}</Typography>
+                    <Button
+                        color="inherit"
+                        onClick={() => navigate('/mg', {state: {groupId: groupData.groupId}})}
+                        style={{marginLeft: 'auto'}}
+                    >
+                        Manage Group
+                    </Button>
                 </Toolbar>
             </AppBar>
             <BottomNavigation
@@ -111,7 +118,7 @@ const ExpenseList = () => {
             </BottomNavigation>
             <Divider/>
             {value === 1 ?
-                <BalanceList expenses={expenses} groupData={groupData}/> : renderExpensesList(expenses, user)}
+                <BalanceList groupData={groupData}/> : renderExpensesList(expenses, user)}
             <Box sx={{position: 'fixed', bottom: 16, right: 16, zIndex: 1000}}>
                 <Fab color="primary" aria-label="add" onClick={() => navigate('/exc', {state: groupData, gid: groupData.groupId})}>
                     <AddIcon/>

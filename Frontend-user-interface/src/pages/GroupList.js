@@ -35,6 +35,7 @@ const GroupList = () => {
             </Box>
         );
     }
+    console.log(groups)
     return (
         <Box>
             <AppBar position="fixed" color="primary" style={{ marginTop: 55, backgroundColor: "#595656", height: 45 }}>

@@ -48,7 +48,7 @@ const JoinGroup = () => {
             const updatedMembers = groupData.members.map(member =>
                 member.guid === selectedMember ? { ...member, id: user.uid } : member
             );
-            fetch(`${apiUrl}api/group/${user.uid}`, {
+            fetch(`${apiUrl}api/user/${user.uid}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'

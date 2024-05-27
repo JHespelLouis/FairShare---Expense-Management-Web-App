@@ -7,14 +7,13 @@ import {
     Divider
 } from '@mui/material';
 
-const BalanceList = ({expenses, groupData}) => {
-    const calculateBalances = (expenses, groupData) => {
+const BalanceList = ({groupData}) => {
+    const calculateBalances = (groupData) => {
         const balances = {};
         groupData.members.forEach(member => {
             balances[member.guid] = {balance: 0, name: member.name};
         });
-
-        expenses.forEach(expense => {
+        groupData.expenses.forEach(expense => {
             const amountPerPerson = parseFloat((expense.amount / expense.forWho.length).toFixed(2));
             expense.forWho.forEach(person => {
                 balances[person.guid].balance -= amountPerPerson;
@@ -22,23 +21,21 @@ const BalanceList = ({expenses, groupData}) => {
             balances[expense.paidBy.guid].balance += parseFloat(expense.amount);
         });
 
+
         Object.keys(balances).forEach(guid => {
             balances[guid].balance = parseFloat(balances[guid].balance.toFixed(2));
         });
-
-        console.log("Final Balances:", balances);
         return balances;
     };
 
     const calculateSettlements = (balances) => {
         const settlements = [];
-        const debtors = Object.entries(balances).filter(([, {balance}]) => balance < 0);
-        const creditors = Object.entries(balances).filter(([, {balance}]) => balance > 0);
-
+        const bal =  JSON.parse(JSON.stringify(balances));
+        const debtors = Object.entries(bal).filter(([, {balance}]) => balance < 0);
+        const creditors = Object.entries(bal).filter(([, {balance}]) => balance > 0);
         while (debtors.length > 0 && creditors.length > 0) {
             const [debtorGuid, debtorData] = debtors[0];
             const [creditorGuid, creditorData] = creditors[0];
-
             const amountToSettle = Math.min(Math.abs(debtorData.balance), creditorData.balance);
             settlements.push({
                 from: debtorData.name,
@@ -61,7 +58,7 @@ const BalanceList = ({expenses, groupData}) => {
         return settlements;
     };
 
-    const balances = calculateBalances(expenses, groupData);
+    const balances = calculateBalances(groupData);
     const settlements = calculateSettlements(balances);
     const maxBalance = Math.max(...Object.values(balances).map(balance => Math.abs(balance.balance)));
 

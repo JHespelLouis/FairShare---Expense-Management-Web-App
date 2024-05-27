@@ -12,6 +12,7 @@ import ExpenseCreation from "./pages/ExpenseCreation";
 import ExpenseList from "./pages/ExpenseList";
 import JoinGroup from './pages/JoinGroup';
 import ExpenseDetails from './pages/ExpenseDetails';
+import ManageGroup from "./pages/ManageGroup";
 
 function App() {
     return (
@@ -28,6 +29,7 @@ function App() {
                         <Route path="exc" element={<ExpenseCreation/>}/>
                         <Route path="invite/:groupId" element={<JoinGroup />} />
                         <Route path="exd" element={<ExpenseDetails />} />
+                        <Route path="mg" element={<ManageGroup />} />
                     </Route>
                 </Routes>
             </AuthProvider>
