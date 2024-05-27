@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import {useNavigate, useLocation} from "react-router-dom";
 import {
     Box,
     ListItemButton,
@@ -19,10 +19,11 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import { useAuth } from '../AuthContext';
-import { ArrowBack } from "@mui/icons-material";
+import {useAuth} from '../AuthContext';
+import {ArrowBack} from "@mui/icons-material";
 import BalanceList from './BalanceList';
 import GroupInvitation from './GroupInvitation';
+import EditIcon from '@mui/icons-material/Edit';
 
 const ExpenseList = () => {
     const user = useAuth();
@@ -87,7 +88,6 @@ const ExpenseList = () => {
             </Box>
         );
     }
-    console.log(groupData)
     return (
         <Box>
             <AppBar position="fixed" color="primary" style={{marginTop: 55, backgroundColor: "#595656", height: 45}}>
@@ -95,13 +95,14 @@ const ExpenseList = () => {
                     <IconButton edge="start" color="inherit" onClick={() => navigate(-1)} aria-label="back">
                         <ArrowBack style={{marginBottom: '0.5em'}}/>
                     </IconButton>
-                    <Typography variant="h6" style={{marginLeft: '0.5em', marginBottom: '0.5em'}}>{groupData.title}</Typography>
+                    <Typography variant="h6"
+                                style={{marginLeft: '0.5em', marginBottom: '0.5em'}}>{groupData.title}</Typography>
                     <Button
                         color="inherit"
                         onClick={() => navigate('/mg', {state: {groupId: groupData.groupId}})}
                         style={{marginLeft: 'auto'}}
                     >
-                        Manage Group
+                        <EditIcon style={{marginBottom: '0.5em'}}/>
                     </Button>
                 </Toolbar>
             </AppBar>
@@ -120,11 +121,12 @@ const ExpenseList = () => {
             {value === 1 ?
                 <BalanceList groupData={groupData}/> : renderExpensesList(expenses, user)}
             <Box sx={{position: 'fixed', bottom: 16, right: 16, zIndex: 1000}}>
-                <Fab color="primary" aria-label="add" onClick={() => navigate('/exc', {state: groupData, gid: groupData.groupId})}>
+                <Fab color="primary" aria-label="add"
+                     onClick={() => navigate('/exc', {state: groupData, gid: groupData.groupId})}>
                     <AddIcon/>
                 </Fab>
             </Box>
-            <GroupInvitation groupId={groupData.groupId} />
+            <GroupInvitation groupId={groupData.groupId}/>
         </Box>
     );
 };

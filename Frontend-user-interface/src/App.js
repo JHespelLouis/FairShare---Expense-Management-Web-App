@@ -1,6 +1,6 @@
 import './styles/App.css';
-import { Routes, Route } from "react-router-dom";
-import { AuthProvider } from './AuthContext';  // Adjust this path to where your AuthProvider is defined
+import {Routes, Route} from "react-router-dom";
+import {AuthProvider} from './AuthContext';
 
 import Nav from "./pages/Nav";
 import Login from "./pages/Login";
@@ -27,9 +27,9 @@ function App() {
                         <Route path="grpc" element={<GroupCreation/>}/>
                         <Route path="ex" element={<ExpenseList/>}/>
                         <Route path="exc" element={<ExpenseCreation/>}/>
-                        <Route path="invite/:groupId" element={<JoinGroup />} />
-                        <Route path="exd" element={<ExpenseDetails />} />
-                        <Route path="mg" element={<ManageGroup />} />
+                        <Route path="invite/:groupId" element={<JoinGroup/>}/>
+                        <Route path="exd" element={<ExpenseDetails/>}/>
+                        <Route path="mg" element={<ManageGroup/>}/>
                     </Route>
                 </Routes>
             </AuthProvider>

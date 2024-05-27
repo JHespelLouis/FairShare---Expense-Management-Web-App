@@ -1,11 +1,11 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, {createContext, useContext, useState, useEffect} from 'react';
+import {getAuth, onAuthStateChanged} from "firebase/auth";
+import {getFirestore, doc, getDoc} from "firebase/firestore";
+import {useNavigate, useLocation} from "react-router-dom";
 
 const AuthContext = createContext(null);
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
@@ -21,12 +21,12 @@ export const AuthProvider = ({ children }) => {
                     if (docSnapshot.exists()) {
                         const userData = {
                             uid: firebaseUser.uid,
-                            userName: docSnapshot.data().firstname, // Assuming 'firstname' is the field for username
+                            userName: docSnapshot.data().firstname,
                         };
                         setUser(userData);
                     } else {
                         console.error("No such document!");
-                        setUser(null); // Handle cases where the user is authenticated but the additional data is missing
+                        setUser(null);
                     }
                 }).catch((error) => {
                     console.error("Error getting document:", error);

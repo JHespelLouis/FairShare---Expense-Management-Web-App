@@ -1,11 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Button, Typography, CircularProgress, FormControl, FormLabel, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
-import { useAuth } from '../AuthContext';
+import React, {useEffect, useState} from 'react';
+import {useParams, useNavigate} from 'react-router-dom';
+import {
+    Box,
+    Button,
+    Typography,
+    CircularProgress,
+    FormControl,
+    FormLabel,
+    FormGroup,
+    FormControlLabel,
+    Checkbox
+} from '@mui/material';
+import {useAuth} from '../AuthContext';
 
 const JoinGroup = () => {
     const user = useAuth();
-    const { groupId } = useParams();
+    const {groupId} = useParams();
     const apiUrl = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
     const [message, setMessage] = useState('');
@@ -25,7 +35,7 @@ const JoinGroup = () => {
                 })
                 .catch(error => console.log('error: ' + error));
         }
-        if(!groupId) {
+        if (!groupId) {
             setMessage('Invalid invitation link.');
         }
     }, [groupId, user, apiUrl]);
@@ -46,26 +56,32 @@ const JoinGroup = () => {
     const handleJoinGroup = () => {
         if (selectedMember !== null) {
             const updatedMembers = groupData.members.map(member =>
-                member.guid === selectedMember ? { ...member, id: user.uid } : member
+                member.guid === selectedMember ? {...member, id: user.uid} : member
             );
             fetch(`${apiUrl}api/user/${user.uid}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ ...groupData, members: updatedMembers })
+                body: JSON.stringify({...groupData, members: updatedMembers})
             }).then(response => response.ok ? navigate('/ex', {state: groupId}) : Promise.reject("Error updating group"))
                 .catch(error => console.log('error: ' + error));
         }
     };
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+        <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100vh'
+        }}>
             {isLoaded ? (
                 <>
                     <Typography variant="h6">{message}</Typography>
                     {!message.includes('already a member') && (
-                        <FormControl component="fieldset" sx={{ mt: 2 }}>
+                        <FormControl component="fieldset" sx={{mt: 2}}>
                             <FormLabel component="legend">Select Your Name</FormLabel>
                             <FormGroup>
                                 {groupData.members && groupData.members.map(member => (
@@ -87,16 +103,16 @@ const JoinGroup = () => {
                     <Button
                         variant="contained"
                         onClick={handleJoinGroup}
-                        sx={{ mt: 2 }}
+                        sx={{mt: 2}}
                         disabled={selectedMember === null || message.includes('already a member')}
                     >
                         Confirm and Join Group
                     </Button>
                 </>
             ) : (
-                <CircularProgress />
+                <CircularProgress/>
             )}
-            <Button variant="contained" onClick={() => navigate('/')} sx={{ mt: 2 }}>
+            <Button variant="contained" onClick={() => navigate('/')} sx={{mt: 2}}>
                 Go to Home
             </Button>
         </Box>

@@ -1,10 +1,10 @@
 import React from 'react';
-import { AppBar, Box, Toolbar, Button, IconButton } from '@mui/material';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { Link, Outlet } from "react-router-dom";
+import {AppBar, Box, Toolbar, Button, IconButton} from '@mui/material';
+import {ThemeProvider, createTheme} from '@mui/material/styles';
+import {Link, Outlet} from "react-router-dom";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LoginIcon from '@mui/icons-material/Login';
-import { useAuth } from '../AuthContext'; // Ensure the import path is correct
+import {useAuth} from '../AuthContext';
 
 const darkTheme = createTheme({
     palette: {
@@ -16,7 +16,7 @@ const darkTheme = createTheme({
 });
 
 export default function Nav() {
-    const user = useAuth(); // Destructure the user and possibly the authIsLoaded if you track the load state
+    const user = useAuth();
 
     return (
         <>
@@ -28,7 +28,7 @@ export default function Nav() {
                                 FairShare
                             </IconButton>
                         </Link>
-                        {user && user.uid ? ( // Check if user exists and has a uid
+                        {user && user.uid ? (
                             <Link to="/myAccount" className="Button">
                                 <Button variant="outlined" endIcon={<AccountCircleIcon/>}>
                                     My Profile

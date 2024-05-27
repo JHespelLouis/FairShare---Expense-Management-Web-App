@@ -1,7 +1,7 @@
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
 import ExpenseForm from './ExpenseForm';
-import { useAuth } from '../AuthContext';
+import {useAuth} from '../AuthContext';
 
 const ExpenseDetails = () => {
     const user = useAuth();

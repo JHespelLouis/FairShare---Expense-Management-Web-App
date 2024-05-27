@@ -35,12 +35,11 @@ const GroupList = () => {
             </Box>
         );
     }
-    console.log(groups)
     return (
         <Box>
-            <AppBar position="fixed" color="primary" style={{ marginTop: 55, backgroundColor: "#595656", height: 45 }}>
-                <Toolbar >
-                    <Typography variant="h6" style={{marginBottom:'0.5em'}}>Groups</Typography>
+            <AppBar position="fixed" color="primary" style={{marginTop: 55, backgroundColor: "#595656", height: 45}}>
+                <Toolbar>
+                    <Typography variant="h6" style={{marginBottom: '0.5em'}}>Groups</Typography>
                 </Toolbar>
             </AppBar>
             <List component="nav">

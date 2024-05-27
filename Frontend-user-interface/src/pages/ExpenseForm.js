@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     TextField,
     Box,
@@ -27,12 +27,12 @@ import {
     Button
 } from "@mui/material";
 import Typography from '@mui/material/Typography';
-import { ArrowBack, Check, Delete } from "@mui/icons-material";
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {ArrowBack, Check, Delete} from "@mui/icons-material";
+import {DatePicker, LocalizationProvider} from '@mui/x-date-pickers';
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 
-const ExpenseForm = ({ initialData, onSubmit, onDelete, isEditMode, groupData, navigate }) => {
+const ExpenseForm = ({initialData, onSubmit, onDelete, isEditMode, groupData, navigate}) => {
     const [title, setTitle] = useState(initialData.title || '');
     const [selectedMember, setSelectedMember] = useState(initialData.paidBy ? initialData.paidBy.guid : 0);
     const [selectedMembers, setSelectedMembers] = useState(initialData.forWho ? initialData.forWho.map(member => member.guid) : []);
@@ -88,7 +88,7 @@ const ExpenseForm = ({ initialData, onSubmit, onDelete, isEditMode, groupData, n
         return numMembers > 0 ? (totalAmount / numMembers).toFixed(2) : '0.00';
     };
 
-    const Item = styled(Paper)(({ theme }) => ({
+    const Item = styled(Paper)(({theme}) => ({
         backgroundColor: "#595656",
         padding: theme.spacing(1),
         color: "white",
@@ -115,48 +115,49 @@ const ExpenseForm = ({ initialData, onSubmit, onDelete, isEditMode, groupData, n
 
     return (
         <Box>
-            <AppBar position="fixed" color="primary" style={{ marginTop: 55, backgroundColor: "#595656", height: 45 }}>
+            <AppBar position="fixed" color="primary" style={{marginTop: 55, backgroundColor: "#595656", height: 45}}>
                 <Toolbar>
-                    <IconButton edge="start" color="inherit" onClick={() => navigate(-1)} aria-label="back" style={{ marginBottom: '0.5em' }}>
-                        <ArrowBack />
+                    <IconButton edge="start" color="inherit" onClick={() => navigate(-1)} aria-label="back"
+                                style={{marginBottom: '0.5em'}}>
+                        <ArrowBack/>
                     </IconButton>
-                    <Typography variant="h6" style={{ marginLeft: '20px', marginBottom: '0.5em' }}>
+                    <Typography variant="h6" style={{marginLeft: '20px', marginBottom: '0.5em'}}>
                         {isEditMode ? 'Edit Expense' : 'New Expense'}
                     </Typography>
                     <IconButton
                         color="inherit"
                         aria-label="submit"
-                        style={{ marginLeft: 'auto', marginBottom: '0.5em' }}
+                        style={{marginLeft: 'auto', marginBottom: '0.5em'}}
                         disabled={isSubmitDisabled}
                         onClick={handleSubmit}
                     >
-                        <Check />
+                        <Check/>
                     </IconButton>
                     {isEditMode && (
                         <IconButton
                             color="inherit"
                             aria-label="delete"
-                            style={{ marginBottom: '0.5em' }}
+                            style={{marginBottom: '0.5em'}}
                             onClick={handleClickOpen}
                         >
-                            <Delete />
+                            <Delete/>
                         </IconButton>
                     )}
                 </Toolbar>
             </AppBar>
-            <Box style={{ margin: '0.8em' }}>
+            <Box style={{margin: '0.8em'}}>
                 <TextField fullWidth id="Title" label="Title" value={title} onChange={(e) => setTitle(e.target.value)}
-                           style={{ marginTop: '0em', marginBottom: '0.5em' }}
-                           variant="standard" />
+                           style={{marginTop: '0em', marginBottom: '0.5em'}}
+                           variant="standard"/>
                 <TextField type="number" fullWidth id="Amount" label="Amount $" value={amount}
-                           onChange={(e) => setAmount(e.target.value)} style={{ marginBottom: '1em' }}
-                           variant="standard" />
-                <Box style={{ marginTop: '0.5em', marginBottom: '0em' }}>
+                           onChange={(e) => setAmount(e.target.value)} style={{marginBottom: '1em'}}
+                           variant="standard"/>
+                <Box style={{marginTop: '0.5em', marginBottom: '0em'}}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker label="Date" value={date} onChange={(newValue) => setDate(newValue)} format="LL" />
+                        <DatePicker label="Date" value={date} onChange={(newValue) => setDate(newValue)} format="LL"/>
                     </LocalizationProvider>
                 </Box>
-                <FormControl fullWidth variant="standard" style={{ marginTop: '0.6em', marginBottom: '0em' }}>
+                <FormControl fullWidth variant="standard" style={{marginTop: '0.6em', marginBottom: '0em'}}>
                     <InputLabel id="demo-simple-select-standard-label">Paid by</InputLabel>
                     <Select
                         labelId="demo-multiple-checkbox-label"
@@ -167,13 +168,13 @@ const ExpenseForm = ({ initialData, onSubmit, onDelete, isEditMode, groupData, n
                     >
                         {groupData.members.map((member, index) => (
                             <MenuItem key={index} value={index}>
-                                <ListItemText primary={member.name} />
+                                <ListItemText primary={member.name}/>
                             </MenuItem>
                         ))}
                     </Select>
                 </FormControl>
             </Box>
-            <Divider />
+            <Divider/>
             <Box>
                 <Item>
                     <Checkbox
@@ -182,7 +183,7 @@ const ExpenseForm = ({ initialData, onSubmit, onDelete, isEditMode, groupData, n
                         tabIndex={-1}
                         disableRipple
                         onChange={handleToggleAll}
-                        style={{ marginLeft: "0em" }}
+                        style={{marginLeft: "0em"}}
                     /> For Who</Item>
                 <List>
                     {groupData.members.map((member, index) => (
@@ -194,11 +195,11 @@ const ExpenseForm = ({ initialData, onSubmit, onDelete, isEditMode, groupData, n
                                         checked={selectedMembers.indexOf(index) > -1}
                                         tabIndex={-1}
                                         disableRipple
-                                        inputProps={{ 'aria-labelledby': `checkbox-list-label-${index}` }}
+                                        inputProps={{'aria-labelledby': `checkbox-list-label-${index}`}}
                                         onChange={() => handleCheckboxChange(index)}
                                     />
                                 </ListItemIcon>
-                                <ListItemText id={`checkbox-list-label-${index}`} primary={member.name} />
+                                <ListItemText id={`checkbox-list-label-${index}`} primary={member.name}/>
                                 <TextField
                                     type="number"
                                     variant="standard"
@@ -207,10 +208,10 @@ const ExpenseForm = ({ initialData, onSubmit, onDelete, isEditMode, groupData, n
                                         startAdornment: <InputAdornment position="start">$</InputAdornment>,
                                     }}
                                     disabled={selectedMembers.indexOf(index) === -1}
-                                    style={{ width: '30%', textAlign: 'right' }}
+                                    style={{width: '30%', textAlign: 'right'}}
                                 />
                             </ListItem>
-                            {index < groupData.members.length - 1 && <Divider />}
+                            {index < groupData.members.length - 1 && <Divider/>}
                         </React.Fragment>
                     ))}
                 </List>

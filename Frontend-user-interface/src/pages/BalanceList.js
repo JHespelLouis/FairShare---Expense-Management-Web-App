@@ -30,7 +30,7 @@ const BalanceList = ({groupData}) => {
 
     const calculateSettlements = (balances) => {
         const settlements = [];
-        const bal =  JSON.parse(JSON.stringify(balances));
+        const bal = JSON.parse(JSON.stringify(balances));
         const debtors = Object.entries(bal).filter(([, {balance}]) => balance < 0);
         const creditors = Object.entries(bal).filter(([, {balance}]) => balance > 0);
         while (debtors.length > 0 && creditors.length > 0) {

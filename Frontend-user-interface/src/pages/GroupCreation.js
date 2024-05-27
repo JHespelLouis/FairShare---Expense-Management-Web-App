@@ -67,8 +67,8 @@ const GroupCreation = (props) => {
                 },
                 body: JSON.stringify(formData)
             }).then(response => {
-                if (response.ok) { // This checks for any successful response (200-299)
-                    navigate(-1); // Navigate back on success
+                if (response.ok) {
+                    navigate(-1);
                 } else {
                     throw new Error('Failed to create group. Status: ' + response.status);
                 }
@@ -84,11 +84,11 @@ const GroupCreation = (props) => {
                 </Box>
             );
         }
-        return ( <Box style={{margin: '5%'}}>
+        return (<Box style={{margin: '5%'}}>
                 <AppBar position="fixed" color="primary" style={{marginTop: 55, backgroundColor: "#595656", height: 45}}>
-                    <Toolbar >
+                    <Toolbar>
                         <IconButton edge="start" color="inherit" onClick={() => navigate(-1)} aria-label="back">
-                            <ArrowBack style={{marginBottom:'0.5em'}}/>
+                            <ArrowBack style={{marginBottom: '0.5em'}}/>
                         </IconButton>
                         <Typography variant="h6" style={{marginLeft: '0.5em', marginBottom: '0.5em'}}>New Group</Typography>
                     </Toolbar>
@@ -109,20 +109,22 @@ const GroupCreation = (props) => {
                         Members
                     </Typography>
                     {members.map((member, index) => (
-                        <div key={index} className="member-container" data-testid="member-container" style={{ display: 'flex', alignItems: 'center' }}>
+                        <div key={index} className="member-container" data-testid="member-container"
+                             style={{display: 'flex', alignItems: 'center'}}>
                             <TextField
                                 fullWidth
                                 label={index === 0 ? "My name" : "Other member"}
                                 value={member}
                                 onChange={(event) => updateMemberName(index, event.target.value)}
                                 variant="standard"
-                                style={{ flex: 1 }} // Allows the TextField to fill the available space, pushing the button to the right
+                                style={{flex: 1}}
                             />
                             {index < members.length - 1 && index !== 0 && (
-                                <Button onClick={() => removeMember(index)} variant="outlined" style={{ marginLeft: '10px' }}><DeleteIcon/></Button>
+                                <Button onClick={() => removeMember(index)} variant="outlined" style={{marginLeft: '10px'}}><DeleteIcon/></Button>
                             )}
                             {index === members.length - 1 && (
-                                <Button onClick={addMember} className={"addMemberButton"} name={"addMemberButton"} variant="contained" style={{ marginLeft: '10px' }}>
+                                <Button onClick={addMember} className={"addMemberButton"} name={"addMemberButton"}
+                                        variant="contained" style={{marginLeft: '10px'}}>
                                     Add
                                 </Button>
                             )}

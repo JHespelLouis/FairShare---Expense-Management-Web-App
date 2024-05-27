@@ -7,9 +7,9 @@ import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {auth} from '../firebase';
 import {createUserWithEmailAndPassword} from "firebase/auth";
 
-import {getFirestore, doc, setDoc} from "firebase/firestore"; // Firestore
+import {getFirestore, doc, setDoc} from "firebase/firestore";
 
-//Animation d'inscription
+
 import {useSpring, animated} from 'react-spring';
 
 const defaultTheme = createTheme();

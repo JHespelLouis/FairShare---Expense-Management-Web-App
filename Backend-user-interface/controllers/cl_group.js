@@ -1,26 +1,5 @@
 const {db} = require('../db.js');
 
-/*
-exports.getGroup = async (req, res) => {
-    try {
-        const groupDocument = db.doc(`groups/${req.params.gid}/`);
-        const snapshot = await groupDocument.get();
-
-        if (!snapshot.exists) {
-            res.status(404)
-        } else {
-            const groupData = snapshot.data();
-            res.status(200).json({
-                groupId: snapshot.id,
-                ...groupData
-            });
-        }
-    } catch (error) {
-        console.error('Error :', error);
-        res.status(500).send('Internal Server Error');
-    }
-}*/
-
 exports.getGroup = async (req, res) => {
     try {
         const groupDocument = db.doc(`groups/${req.params.gid}`);
@@ -35,7 +14,7 @@ exports.getGroup = async (req, res) => {
             const expenses = [];
 
             expensesSnapshot.forEach(doc => {
-                expenses.push({ expenseId: doc.id, ...doc.data() });
+                expenses.push({expenseId: doc.id, ...doc.data()});
             });
 
             res.status(200).json({
@@ -49,7 +28,6 @@ exports.getGroup = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 }
-
 
 
 exports.postGroup = async (req, res) => {

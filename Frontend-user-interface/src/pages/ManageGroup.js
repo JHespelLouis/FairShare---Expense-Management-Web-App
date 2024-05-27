@@ -1,6 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import '../styles/GroupCreation.css';
-import {Button, TextField, Box, Toolbar, AppBar, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
+import {
+    Button,
+    TextField,
+    Box,
+    Toolbar,
+    AppBar,
+    IconButton,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle
+} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
@@ -76,7 +88,7 @@ const ManageGroup = () => {
             body: JSON.stringify(formData)
         }).then(response => {
             if (response.ok) {
-                navigate(-1); // Navigate back on success
+                navigate(-1);
             } else {
                 throw new Error('Failed to update group. Status: ' + response.status);
             }
@@ -93,7 +105,7 @@ const ManageGroup = () => {
             }
         }).then(response => {
             if (response.ok) {
-                navigate('/'); // Navigate to the group list on success
+                navigate('/');
             } else {
                 throw new Error('Failed to delete group. Status: ' + response.status);
             }
@@ -117,13 +129,14 @@ const ManageGroup = () => {
                     <IconButton edge="start" color="inherit" onClick={() => navigate(-1)} aria-label="back">
                         <ArrowBack style={{marginBottom: '0.5em'}}/>
                     </IconButton>
-                    <Typography variant="h6" style={{marginLeft: '0.5em', marginBottom: '0.5em'}}>Manage Group</Typography>
+                    <Typography variant="h6" style={{marginLeft: '0.5em', marginBottom: '0.5em'}}>Manage
+                        Group</Typography>
                     <Button
                         color="inherit"
                         onClick={() => setOpenDeleteDialog(true)}
                         style={{marginLeft: 'auto'}}
                     >
-                        <DeleteIcon />
+                        <DeleteIcon style={{marginBottom: '0.5em'}}/>
                     </Button>
                 </Toolbar>
             </AppBar>
@@ -143,20 +156,22 @@ const ManageGroup = () => {
                     Members
                 </Typography>
                 {members.map((member, index) => (
-                    <div key={index} className="member-container" data-testid="member-container" style={{ display: 'flex', alignItems: 'center' }}>
+                    <div key={index} className="member-container" data-testid="member-container"
+                         style={{display: 'flex', alignItems: 'center'}}>
                         <TextField
                             fullWidth
                             label={index === 0 ? "My name" : "Other member"}
                             value={member}
                             onChange={(event) => updateMemberName(index, event.target.value)}
                             variant="standard"
-                            style={{ flex: 1 }} // Allows the TextField to fill the available space, pushing the button to the right
+                            style={{flex: 1}}
                         />
                         {index < members.length - 1 && index !== 0 && (
-                            <Button onClick={() => removeMember(index)} variant="outlined" style={{ marginLeft: '10px' }}><DeleteIcon/></Button>
+                            <Button onClick={() => removeMember(index)} variant="outlined" style={{marginLeft: '10px'}}><DeleteIcon/></Button>
                         )}
                         {index === members.length - 1 && (
-                            <Button onClick={addMember} className={"addMemberButton"} name={"addMemberButton"} variant="contained" style={{ marginLeft: '10px' }}>
+                            <Button onClick={addMember} className={"addMemberButton"} name={"addMemberButton"}
+                                    variant="contained" style={{marginLeft: '10px'}}>
                                 Add
                             </Button>
                         )}
