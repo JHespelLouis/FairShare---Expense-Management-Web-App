@@ -171,7 +171,7 @@ export default function Register() {
                             required
                             fullWidth
                             id="email"
-                            label="Adresse email"
+                            label="Email address"
                             name="email"
                             autoComplete="email"
                             error={!!emailError}
@@ -182,7 +182,7 @@ export default function Register() {
                             required
                             fullWidth
                             name="password"
-                            label="Mot de passe"
+                            label="Password"
                             type="password"
                             id="password"
                             autoComplete="current-password"
